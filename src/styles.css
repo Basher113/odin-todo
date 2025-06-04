@@ -1,8 +1,12 @@
+
 .project-card {
     cursor: pointer;
 }
 
 .active-project {
     background-color: rgb(255, 196, 0);
-    
+}
+
+form {
+    margin-bottom: 10em;
 }
