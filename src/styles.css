@@ -1,0 +1,8 @@
+.project-card {
+    cursor: pointer;
+}
+
+.active-project {
+    background-color: rgb(255, 196, 0);
+    
+}
