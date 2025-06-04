@@ -1,15 +1,15 @@
 import "./styles.css"
 import { Project} from "./modules/project";
-import { Todo } from "./modules/todo";
+import { Todo, createTodoElement } from "./modules/todo";
 
 function DOMEditor() {
     // Form Dom start //
     const formProject = document.querySelector("#project-form");
     const projectCardsContainer = document.querySelector(".project-list");
     const projectObj = Project();
+    const projectPlusButton = document.querySelector(".project-plus");
 
     const updateProjectDisplay = () => {
-        const projectPlusButton = document.querySelector(".project-plus");
         const projects = projectObj.getProjects();
 
         projectCardsContainer.textContent = "";
@@ -33,9 +33,10 @@ function DOMEditor() {
         })
 
         projectPlusButton.addEventListener("click", () => {
-            formProject[0].focus() // focus on creating new project input when plus button is clicked
-            
+            formProject[0].focus() // focus to new project input when plus button is clicked
         })
+
+       
     }
 
     const createProjectCard = (project) => {
@@ -71,8 +72,19 @@ function DOMEditor() {
         todoListUlElement.textContent = "";
 
         todosByActiveProject.forEach(todo => {
-            const todoEl = createTodoEl(todo);
+            const todoEl = createTodoElement(todo);
             todoListUlElement.appendChild(todoEl);
+        })
+
+        const completeButtons = document.querySelectorAll(".complete-task-button");
+        completeButtons.forEach(completeButton => {
+            completeButton.addEventListener("click", () => {
+                const todoId = completeButton.dataset.todoId;
+                console.log(todoId)
+                todoObj.finishTodo(todoId);
+                updateTodoDisplay();
+            })
+
         })
     }
 
