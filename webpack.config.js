@@ -12,4 +12,18 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({template: "./src/index.html"})
     ],
+
+    devtool: "eval-source-map",
+    devServer: {
+        watchFiles: ["./src/template.html"],
+    },
+
+    module: {
+        rules: [
+        {
+            test: /\.css$/i,
+            use: ["style-loader", "css-loader"],
+        },
+        ],
+    },
 }
