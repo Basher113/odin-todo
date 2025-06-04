@@ -9,6 +9,7 @@ function DOMEditor() {
     const projectObj = Project();
 
     const updateProjectDisplay = () => {
+        const projectPlusButton = document.querySelector(".project-plus");
         const projects = projectObj.getProjects();
 
         projectCardsContainer.textContent = "";
@@ -30,13 +31,18 @@ function DOMEditor() {
                 updateTodoDisplay(); // update the todo display also to get the todo list from the active project
             })
         })
+
+        projectPlusButton.addEventListener("click", () => {
+            formProject[0].focus() // focus on creating new project input when plus button is clicked
+            
+        })
     }
 
     const createProjectCard = (project) => {
         const projectEl = document.createElement("li");
         projectEl.classList.add("project-card");
         projectEl.setAttribute("data-project-id", project.id);
-        projectEl.textContent = project.name + " - " + project.id;
+        projectEl.textContent = project.name;
         return projectEl;
     }
 

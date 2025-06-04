@@ -4,33 +4,51 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
 </head>
 <body>
     <div class="container">
-        <div class="project-container">
-            <h2>Projects</h2>
-            <ul class="project-list">
-                
-            </ul>
+
+        <div class="sidebar-container">
+            <h1 class="logo">Papu Do</h1>
+
+            <div class="project-container">
+                <h2>Projects <button>+</button></h2>
+                <ul class="project-list">
+                    
+
+                    
+                </ul>
+            </div>
+
+            <form action="" id="project-form">
+                <input type="text" name="project-name" placeholder="Project name" required>
+                <button>Create Project</button>
+            </form>
+            
         </div>
 
-        <form action="" id="project-form">
-            <input type="text" name="project-name" placeholder="Project name" required>
-            <button>Create Project</button>
-        </form>
+
+
+        
 
         <div class="todo-container">
             <h2>Todos</h2>
             <ul class="todo-list">
 
             </ul>
-        </div>
-        <form action="" id="todo-form">
-            <input type="text" placeholder="title" name="title" required>
-            <textarea name="description" placeholder="description"></textarea>
 
-            <button>Create Todo</button>
-        </form>
+            <form action="" id="todo-form">
+                <input type="text" placeholder="title" name="title" required>
+                <textarea name="description" placeholder="description"></textarea>
+
+                <button>Create Todo</button>
+            </form>
+        </div>
+        
     </div>
 </body>
 </html>
