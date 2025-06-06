@@ -15,14 +15,13 @@
         <div class="sidebar-container">
             <h1 class="logo">Papu Do</h1>
 
-            <div class="project-container">
-                <h2>Projects <button class="project-plus">+</button></h2>
-                <ul class="project-list">
-                    
-
-                    
-                </ul>
+            <div class="project-header">
+                <h2>Projects</h2>
+                <button class="project-plus">+</button>
             </div>
+            <ul class="project-list">
+                    
+            </ul>
 
             <form action="" id="project-form">
                 <input type="text" name="project-name" placeholder="Project name" required>
@@ -41,12 +40,33 @@
 
             </ul>
 
-            <form action="" id="todo-form">
-                <input type="text" placeholder="title" name="title" required>
-                <textarea name="description" placeholder="description"></textarea>
 
-                <button>Create Todo</button>
-            </form>
+            <!-- The Modal -->
+            <div id="form-modal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Todo Form</h3>
+                        <span class="close">&times;</span>
+                    </div>
+                    
+                    <form action="" id="todo-form">
+                        <label for="title">Project name</label>
+                        <input type="text" name="title" id="title" required>
+
+                        <label for="description">Description</label>
+                        <textarea name="description" placeholder="description" id="description"></textarea>
+
+                        <button class="todo-submit-button">Create Todo</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <button class="add-todo-button">+</button>
+
+            
         </div>
         
     </div>

@@ -4,9 +4,9 @@ import { Todo, createTodoElement } from "./modules/todo";
 
 function DOMEditor() {
     // Form Dom start //
+    const projectObj = Project();
     const formProject = document.querySelector("#project-form");
     const projectCardsContainer = document.querySelector(".project-list");
-    const projectObj = Project();
     const projectPlusButton = document.querySelector(".project-plus");
 
     const updateProjectDisplay = () => {
@@ -33,10 +33,9 @@ function DOMEditor() {
         })
 
         projectPlusButton.addEventListener("click", () => {
+            formProject.classList.add("visible");
             formProject[0].focus() // focus to new project input when plus button is clicked
         })
-
-       
     }
 
     const createProjectCard = (project) => {
@@ -56,6 +55,7 @@ function DOMEditor() {
         projectObj.addProject(name);
         updateProjectDisplay();
         formProject.reset(); // reset the form
+        formProject.classList.remove("visible");
     });
 
     updateProjectDisplay();
@@ -80,32 +80,65 @@ function DOMEditor() {
         completeButtons.forEach(completeButton => {
             completeButton.addEventListener("click", () => {
                 const todoId = completeButton.dataset.todoId;
-                console.log(todoId)
                 todoObj.finishTodo(todoId);
                 updateTodoDisplay();
             })
+        })
 
+        const editIcons = document.querySelectorAll(".edit-icon");
+        editIcons.forEach(editIcon => {
+            editIcon.addEventListener("click", () => {
+                const todoId = editIcon.dataset.todoId;
+                const todo = todoObj.getTodoById(todoId);
+                openFormModal(todo);
+            })
         })
     }
 
-    const createTodoEl = (todo) => {
-        const todoEl = document.createElement("li");
-        todoEl.classList.add("todo");
-        todoEl.textContent = todo.title + " - " + todo.description;
-        return todoEl;
+    const openFormModal = (todo=null) => {
+        formModal.style.display = "flex";
+        if (todo) {
+            document.querySelector("input[name='title']").value = todo.title;
+            document.querySelector("textarea").value = todo.description 
+            document.querySelector(".todo-submit-button").textContent = "Update"
+        }
+
+        formTodo.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = new FormData(formTodo);
+            const title = formData.get("title");
+            const description = formData.get("description");
+            const activeProjectId = projectObj.getActiveProject().id;
+            console.log(title, description, activeProjectId)
+            todoObj.addTodo(title, description, activeProjectId);
+            formTodo.reset();
+            updateTodoDisplay();
+        })
     }
 
-    formTodo.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const formData = new FormData(formTodo);
-        const title = formData.get("title");
-        const description = formData.get("description");
-        const activeProjectId = projectObj.getActiveProject().id;
-        todoObj.addTodo(title, description, activeProjectId);
-        formTodo.reset();
-        updateTodoDisplay();
-    })
+    // Get the modal
+    var formModal = document.querySelector("#form-modal");
+
+    // Get the button that opens the modal
+    var addTodoButton = document.querySelector(".add-todo-button");
+
+    // Get the <span> element that closes the modal
+    var closeButton = document.querySelector(".close");
+
+    // When the user clicks the button, open the modal 
+    addTodoButton.onclick = function() {
+        openFormModal()
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    closeButton.onclick = function() {
+        formModal.style.display = "none";
+    }
+
+    
     updateTodoDisplay();
+
+
     // TODO DISPLAY END //
 }
 

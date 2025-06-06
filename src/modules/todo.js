@@ -15,6 +15,8 @@ export function Todo() {
         return todoList.filter(todo => todo.projectId === projectId);
     }
 
+    const getTodoById = (todoId) => todoList.find(todo => todo.id === todoId);
+
     const finishTodo = (todoId) => {
         const index = todoList.findIndex(todo => todo.id === todoId);
         todoList[index].isFinished = !todoList[index].isFinished
@@ -29,7 +31,8 @@ export function Todo() {
         todoList,
         addTodo,
         getTodosByProject,
-        finishTodo
+        finishTodo,
+        getTodoById
     }
 }
 
@@ -54,11 +57,15 @@ export const createTodoElement = (todo) => {
     dateDiv.textContent = todo.date || "May 14";
 
     const editIcon = document.createElement('img');
+    editIcon.setAttribute("data-todo-id", todo.id)
+    editIcon.className = "edit-icon"
     editIcon.src = EditSvg;
     editIcon.alt = 'Edit task';
     editIcon.title = 'Edit';
 
     const deleteIcon = document.createElement('img');
+    deleteIcon.setAttribute("data-todo-id", todo.id)
+    deleteIcon.className = "delete-icon";
     deleteIcon.src = TrashSvg;
     deleteIcon.alt = 'Delete task';
     deleteIcon.title = 'Delete';
