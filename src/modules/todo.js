@@ -5,7 +5,7 @@ import TrashSvg from "../assets/trash.svg";
 export function Todo() {
     let todoList = getFromStorage("todoList") || [];
 
-    const addTodo = (title, description, isFinished=false, projectId) => {
+    const addTodo = (title, description, projectId, isFinished=false) => {
         const id = crypto.randomUUID();
         todoList.push({id, title, description, isFinished, projectId});
         setToStorageTodo();
@@ -16,6 +16,12 @@ export function Todo() {
     }
 
     const getTodoById = (todoId) => todoList.find(todo => todo.id === todoId);
+
+    const deleteTodo = (todoId) => {
+        const newList = todoList.filter(todo => todo.id !== todoId);
+        todoList = newList;
+        setToStorageTodo()
+    }
 
     const finishTodo = (todoId) => {
         const index = todoList.findIndex(todo => todo.id === todoId);
@@ -30,6 +36,8 @@ export function Todo() {
     return {
         todoList,
         addTodo,
+        editTodo,
+        deleteTodo,
         getTodosByProject,
         finishTodo,
         getTodoById
@@ -37,6 +45,7 @@ export function Todo() {
 }
 
 export const createTodoElement = (todo) => {
+    if (!todo) return;
     const completeButton = document.createElement('button');
     completeButton.className = 'complete-task-button';
     completeButton.setAttribute("data-todo-id", todo.id)
@@ -44,17 +53,13 @@ export const createTodoElement = (todo) => {
         completeButton.setAttribute('aria-label', 'Mark as complete');
         completeButton.classList.add("complete")
     }
-
-
-
     const titleDiv = document.createElement("div");
     titleDiv.classList.add("todo-title");
-    titleDiv.textContent = todo.title || "hello?";
-    console.log(titleDiv);
+    titleDiv.textContent = todo.title;
 
     const dateDiv = document.createElement("div");
     dateDiv.classList.add("todo-date");
-    dateDiv.textContent = todo.date || "May 14";
+    dateDiv.textContent = todo.date;
 
     const editIcon = document.createElement('img');
     editIcon.setAttribute("data-todo-id", todo.id)

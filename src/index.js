@@ -64,7 +64,6 @@ function DOMEditor() {
     // TODO DISPLAY START //
     const todoObj = Todo();
     const todoListUlElement = document.querySelector(".todo-list");
-    const formTodo = document.querySelector("#todo-form");
 
     const updateTodoDisplay = () => {
         const activeProject = projectObj.getActiveProject()
@@ -90,52 +89,63 @@ function DOMEditor() {
             editIcon.addEventListener("click", () => {
                 const todoId = editIcon.dataset.todoId;
                 const todo = todoObj.getTodoById(todoId);
-                openFormModal(todo);
             })
         })
+
+        const deleteIcons = document.querySelectorAll(".delete-icon");
+        deleteIcons.forEach(deleteIcon => {
+            deleteIcon.addEventListener("click", () => {
+                const todoId = deleteIcon.dataset.todoId;
+                todoObj.deleteTodo(todoId);
+                updateTodoDisplay();
+            })
+            
+        })
+
+        
+
     }
 
-    const openFormModal = (todo=null) => {
+    const openFormModal = () => {
+        const formTodo = document.querySelector("#todo-form");
         formModal.style.display = "flex";
-        if (todo) {
-            document.querySelector("input[name='title']").value = todo.title;
-            document.querySelector("textarea").value = todo.description 
-            document.querySelector(".todo-submit-button").textContent = "Update"
-        }
-
         formTodo.addEventListener("submit", (e) => {
             e.preventDefault();
             const formData = new FormData(formTodo);
             const title = formData.get("title");
             const description = formData.get("description");
             const activeProjectId = projectObj.getActiveProject().id;
-            console.log(title, description, activeProjectId)
             todoObj.addTodo(title, description, activeProjectId);
+            formModal.style.display = "none";
             formTodo.reset();
             updateTodoDisplay();
         })
+
+        // Get the <span> element that closes the modal
+        const closeButton = document.querySelector(".close");
+
+        closeButton.onclick = function() {
+            updateTodoDisplay()
+            formTodo.reset();
+            formModal.style.display = "none";
+        }
     }
 
     // Get the modal
-    var formModal = document.querySelector("#form-modal");
+    const formModal = document.querySelector("#form-modal");
 
     // Get the button that opens the modal
-    var addTodoButton = document.querySelector(".add-todo-button");
-
-    // Get the <span> element that closes the modal
-    var closeButton = document.querySelector(".close");
-
-    // When the user clicks the button, open the modal 
-    addTodoButton.onclick = function() {
-        openFormModal()
-    }
-
-    // When the user clicks on <span> (x), close the modal
-    closeButton.onclick = function() {
-        formModal.style.display = "none";
-    }
+    const addTodoButton = document.querySelector(".add-todo-button");
 
     
+
+    // When the user clicks the button, open the modal 
+    addTodoButton.addEventListener("click", () => {
+        openFormModal();
+    })
+
+    
+
     updateTodoDisplay();
 
 
