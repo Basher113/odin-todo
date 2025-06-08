@@ -6,17 +6,24 @@ import TrashSvg from "./assets/trash.svg";
 export function Todo() {
     let todoList = getFromStorage("todoList") || [];
 
+    const getTodosByProject = (projectId) => {
+        return todoList.filter(todo => todo.projectId === projectId);
+    }
+
+    const getTodoById = (todoId) => todoList.find(todo => todo.id === todoId);
+
     const addTodo = (title, description, projectId, isFinished=false) => {
         const id = crypto.randomUUID();
         todoList.push({id, title, description, isFinished, projectId});
         setToStorageTodo();
     }
 
-    const getTodosByProject = (projectId) => {
-        return todoList.filter(todo => todo.projectId === projectId);
+    const editTodo = (todoId, newTitle, newDescription) => {
+        const index = todoList.findIndex(todo => todo.id === todoId);
+        todoList[index].title = newTitle;
+        todoList[index].description = newDescription;
+        setToStorageTodo();
     }
-
-    const getTodoById = (todoId) => todoList.find(todo => todo.id === todoId);
 
     const deleteTodo = (todoId) => {
         const newList = todoList.filter(todo => todo.id !== todoId);
@@ -36,11 +43,12 @@ export function Todo() {
     
     return {
         todoList,
-        addTodo,
-        deleteTodo,
+        getTodoById,
         getTodosByProject,
+        addTodo,
+        editTodo,
+        deleteTodo,
         finishTodo,
-        getTodoById
     }
 }
 
@@ -50,6 +58,8 @@ const formModal = document.querySelector("#form-modal");
 const todoForm = document.querySelector("#todo-form");
 const addTodoButton = document.querySelector(".add-todo-button");
 const todoHeader = document.querySelector(".todo-header");
+let isEditing = false
+let todoToEdit = null;
 
 export const createTodoElement = (todo) => {
     const completeButton = document.createElement('button');
@@ -96,17 +106,6 @@ export const createTodoElement = (todo) => {
     return todoCard
 }
 
-const listenEditTodo = () => {
-    // Listens for edit todo when edit icon is clicked
-    const editIcons = document.querySelectorAll(".edit-icon");
-    editIcons.forEach(editIcon => {
-        editIcon.addEventListener("click", () => {
-            const todoId = editIcon.dataset.todoId;
-            const todo = todoObj.getTodoById(todoId);
-        })
-    })
-}
-
 const listenCompleteTodo = () => {
     // Listens for completing todo when the complete button is clicked
     const completeButtons = document.querySelectorAll(".complete-todo-button"); 
@@ -131,25 +130,66 @@ const listenDeleteTodo = () => {
     })   
 }
 
-addTodoButton.addEventListener("click", () => {
-    formModal.style.display = "flex";
+const listenEditTodo = () => {
+    // Listens for edit todo when edit icon is clicked
+    const editIcons = document.querySelectorAll(".edit-icon");
+    editIcons.forEach(editIcon => {
+        editIcon.addEventListener("click", () => {
+            const todoId = editIcon.dataset.todoId;
+            const todo = todoObj.getTodoById(todoId);
+            isEditing = true;
+            todoToEdit = todo;
+            showFormModal()
+        })
+    })
+}
+
+const showFormModal = () => {
     const closeModalButton = document.querySelector(".close");
+    const titleInput = document.querySelector("#title-input");
+    const descriptionInput = document.querySelector("#description-input");
+    const todoSubmitButton = document.querySelector(".todo-submit-button");
+
+    if (isEditing && todoToEdit) {
+        titleInput.value = todoToEdit.title;
+        descriptionInput.value = todoToEdit.description;
+        todoSubmitButton.textContent = "Edit Todo"
+    } 
+
+    formModal.style.display = "flex";
     closeModalButton.addEventListener("click", () => {
         formModal.style.display = "none";
+        isEditing = false;
+        todoToEdit = null;
+        todoForm.reset();
     })
-        
-})
+}
 
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const formData = new FormData(todoForm);
     const title = formData.get("title");
     const description = formData.get("description");
-    todoObj.addTodo(title, description, activeProject.id);
+    if (isEditing && todoToEdit) {
+        todoObj.editTodo(todoToEdit.id, title, description);
+        isEditing = false;
+        todoToEdit = null;
+    } else {
+        todoObj.addTodo(title, description, activeProject.id);
+    }
+
     formModal.style.display = "none";
     todoForm.reset();
     updateTodoDisplay();
 })
+
+addTodoButton.addEventListener("click", () => {
+    showFormModal()
+})
+
+
+
+
 
 export const updateTodoDisplay = () => {
     const todosByActiveProject = todoObj.getTodosByProject(activeProject.id); // get the todo list for active project
