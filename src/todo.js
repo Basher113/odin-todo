@@ -1,5 +1,6 @@
 import { setToStorage, getFromStorage } from "./utils/storage";
 import { activeProject } from "./project";
+import { format } from "date-fns";
 
 import EditSvg from "./assets/edit.svg";
 import TrashSvg from "./assets/trash.svg";
@@ -12,16 +13,17 @@ export function Todo() {
 
     const getTodoById = (todoId) => todoList.find(todo => todo.id === todoId);
 
-    const addTodo = (title, description, projectId, isFinished=false) => {
+    const addTodo = (title, description, dueDate, projectId, isFinished=false) => {
         const id = crypto.randomUUID();
-        todoList.push({id, title, description, isFinished, projectId});
+        todoList.push({id, title, description, dueDate, isFinished, projectId});
         setToStorageTodo();
     }
 
-    const editTodo = (todoId, newTitle, newDescription) => {
+    const editTodo = (todoId, newTitle, newDescription, newDate) => {
         const index = todoList.findIndex(todo => todo.id === todoId);
         todoList[index].title = newTitle;
         todoList[index].description = newDescription;
+        todoList[index].dueDate = newDate;
         setToStorageTodo();
     }
 
@@ -58,7 +60,7 @@ const formModal = document.querySelector("#form-modal");
 const todoForm = document.querySelector("#todo-form");
 const addTodoButton = document.querySelector(".add-todo-button");
 const todoHeader = document.querySelector(".todo-header");
-let isEditing = false
+let isEditing = false;
 let todoToEdit = null;
 
 export const createTodoElement = (todo) => {
@@ -68,6 +70,7 @@ export const createTodoElement = (todo) => {
     if (todo.isFinished) {
         completeButton.setAttribute('aria-label', 'Mark as complete');
         completeButton.classList.add("complete")
+        completeButton.textContent = "✔"
     }
     const titleDiv = document.createElement("div");
     titleDiv.classList.add("todo-title");
@@ -75,8 +78,8 @@ export const createTodoElement = (todo) => {
 
     const dateDiv = document.createElement("div");
     dateDiv.classList.add("todo-date");
-    dateDiv.textContent = todo.date || "June 8";
-
+    dateDiv.textContent = format(todo.dueDate, "MMM dd");
+    console.log(todo)
     const editIcon = document.createElement('img');
     editIcon.setAttribute("data-todo-id", todo.id)
     editIcon.className = "edit-icon"
@@ -170,12 +173,13 @@ todoForm.addEventListener("submit", (e) => {
     const formData = new FormData(todoForm);
     const title = formData.get("title");
     const description = formData.get("description");
+    const dueDate = formData.get("date")
     if (isEditing && todoToEdit) {
-        todoObj.editTodo(todoToEdit.id, title, description);
+        todoObj.editTodo(todoToEdit.id, title, dueDate, description);
         isEditing = false;
         todoToEdit = null;
     } else {
-        todoObj.addTodo(title, description, activeProject.id);
+        todoObj.addTodo(title, description, dueDate, activeProject.id);
     }
 
     formModal.style.display = "none";

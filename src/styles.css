@@ -148,7 +148,6 @@ form {
 
 
     button {
-        font-size: 3rem;
         background-color: transparent;
         border: none;
         color: white;
@@ -162,6 +161,8 @@ form {
     button.complete {
         border-color: green;
         background-color: green;
+        font-size: 1rem;
+        font-weight: 700;
     }
 
 }
