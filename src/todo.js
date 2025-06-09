@@ -69,8 +69,10 @@ export const createTodoElement = (todo) => {
     completeButton.setAttribute("data-todo-id", todo.id)
     if (todo.isFinished) {
         completeButton.setAttribute('aria-label', 'Mark as complete');
-        completeButton.classList.add("complete")
-        completeButton.textContent = "✔"
+        completeButton.classList.add("complete");
+        completeButton.textContent = "✔";
+
+        
     }
     const titleDiv = document.createElement("div");
     titleDiv.classList.add("todo-title");
@@ -78,8 +80,9 @@ export const createTodoElement = (todo) => {
 
     const dateDiv = document.createElement("div");
     dateDiv.classList.add("todo-date");
-    dateDiv.textContent = format(todo.dueDate, "MMM dd");
-    console.log(todo)
+    const formattedDate = format(new Date(todo.dueDate), "MMM dd") // output ex: June 10
+    dateDiv.textContent = formattedDate;
+    console.log(todo.dueDate)
     const editIcon = document.createElement('img');
     editIcon.setAttribute("data-todo-id", todo.id)
     editIcon.className = "edit-icon"
@@ -175,9 +178,9 @@ todoForm.addEventListener("submit", (e) => {
     const formData = new FormData(todoForm);
     const title = formData.get("title");
     const description = formData.get("description");
-    const dueDate = formData.get("date")
+    const dueDate = formData.get("date");
     if (isEditing && todoToEdit) {
-        todoObj.editTodo(todoToEdit.id, title, dueDate, description);
+        todoObj.editTodo(todoToEdit.id, title, description, dueDate);
         isEditing = false;
         todoToEdit = null;
     } else {
