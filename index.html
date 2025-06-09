@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chewy&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+<script defer src="main.js"></script></head>
+<body>
+    <div class="container">
+
+        <div class="sidebar-container">
+            <h1 class="logo">Papu Do</h1>
+
+            <div class="project-header">
+                <h2>Projects</h2>
+                <button class="project-plus">+</button>
+            </div>
+            <ul class="project-list">
+                    
+            </ul>
+
+            <form action="" id="project-form">
+                <input type="text" name="project-name" placeholder="Project name" required>
+                <button>Create Project</button>
+            </form>
+            
+        </div>
+
+        <div class="todo-container">
+            <h2 class="todo-header">Todos</h2>
+            <ul class="todo-list">
+
+            </ul>
+
+
+            <!-- The Modal -->
+            <div id="form-modal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Todo Form</h3>
+                        <span class="close">&times;</span>
+                    </div>
+                    
+                    <form action="" id="todo-form">
+                        <label for="title-input">Title</label>
+                        <input type="text" name="title" id="title-input" required>
+
+                        <label for="description-input">Description</label>
+                        <textarea name="description" placeholder="description" id="description-input"></textarea>
+
+                        <label for="date-input">Due Date</label>
+                        <input type="date" name="date" id="date-input" required>
+
+                        <button class="todo-submit-button">Create Todo</button>
+                    </form>
+
+                </div>
+            </div>
+
+            <button class="add-todo-button">+</button>
+
+            
+        </div>
+        
+    </div>
+</body>
+</html>
