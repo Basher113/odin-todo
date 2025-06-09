@@ -151,11 +151,13 @@ const showFormModal = () => {
     const closeModalButton = document.querySelector(".close");
     const titleInput = document.querySelector("#title-input");
     const descriptionInput = document.querySelector("#description-input");
+    const dueDateInput = document.querySelector("#date-input");
     const todoSubmitButton = document.querySelector(".todo-submit-button");
 
     if (isEditing && todoToEdit) {
         titleInput.value = todoToEdit.title;
         descriptionInput.value = todoToEdit.description;
+        dueDateInput.value = todoToEdit.dueDate;
         todoSubmitButton.textContent = "Edit Todo"
     } 
 
